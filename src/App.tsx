@@ -9,8 +9,11 @@ const App = () => {
       <Navbar />
 
       <Card>
-      <Header />
-hello
+      <hr className="mt-4" />
+
+<ListContainer>
+  hello
+</ListContainer>
       </Card>
     </main>
   )
