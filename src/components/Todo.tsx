@@ -50,7 +50,11 @@ export default function Todo({ todo }: ITodoProps) {
           completed && "line-through"
         }`}
       >
-{text}
+        {isEditing ? (
+          <EditForm todoText={text} handleSubmit={()=>{}} />
+        ) : (
+          text
+        )}
       </div>
 
       <div
