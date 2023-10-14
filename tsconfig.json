@@ -18,7 +18,29 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+
+    /* absolute import path */
+    "baseUrl": "./src",
+    "paths": {
+      "@custom_components/*": ["custom_components/*"],
+      "@components/*": ["components/*"],
+      "@sections/*": ["sections/*"],
+      "@layouts/*": ["layouts/*"],
+      "@pages/*": ["pages/*"],
+      "@modals/*": ["modals/*"],
+      "@ts/*": ["ts/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@hoc/*": ["hoc/*"],
+      "@helper/*": ["helper/*"],
+      "@assets/*": ["assets/*"],
+      "@constants/*": ["constants/*"],
+      "@styles/*": ["styles/*"],
+      "@redux/*": ["redux/*"],
+      "@routes/*": ["routes/*"],
+      "@table_configs/*": ["table_configs/*"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
