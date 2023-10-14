@@ -1,16 +1,115 @@
 // import tickImage from '../assets/images/double-tick.png';
 // import noteImage from "../assets/images/notes.png";
 // import plusImage from "../assets/images/plus.png";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import {
+  useAddTodoMutation,
+  useDeleteTodoMutation,
+  useEditTodoMutation,
+  useGetTodosQuery,
+} from "@redux/features/todo/todoApi";
+import {
+  selectFilterReducer,
+  setSearchTodo,
+} from "@redux/features/filter/filterSlice";
+import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CgAdd } from "react-icons/cg";
+import debounceFn from "@utils/debounceFn";
 
 export default function Header() {
+  const [input, setInput] = useState("");
+
+  const { _order, _sort, color, completed, text_like } =
+    useAppSelector(selectFilterReducer);
+  const { data: todos } = useGetTodosQuery({
+    _order,
+    _sort,
+    color,
+    completed,
+    text_like,
+  });
+
+  const [addTodo] = useAddTodoMutation();
+  const [editTodo] = useEditTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
+  const dispatch = useAppDispatch();
+
+  const handleInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setInput(e.target.value);
+  };
+
+  const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    try {
+      toast.loading("Creating a todo", { id: "addTodo" });
+      await addTodo({ text: input, completed: false }).unwrap();
+      toast.success("Todo created successfully", { id: "addTodo" });
+      setInput("");
+    } catch (error) {
+      toast.error("Failed to add todo.", { id: "addTodo" });
+    }
+  };
+
+  const completeHandler = async () => {
+    try {
+      const incompleteTodos = todos?.filter((todo) => !todo.completed) ?? [];
+      toast.loading("Executing complete tasks.", { id: "completeTasks" });
+
+      for (const todo of incompleteTodos) {
+        await editTodo({ id: todo.id, data: { completed: true } }).unwrap();
+      }
+
+      toast.success("Complete tasks executed successfully.", {
+        id: "completeTasks",
+      });
+      // .forEach((todo) => {
+      //   editTodo({ id: todo.id, data: { completed: true } }).unwrap();
+      // });
+    } catch (error) {
+      toast.error("Failed to execute complete tasks.", { id: "completeTasks" });
+    }
+  };
+
+  const handleClearCompleted = async () => {
+    try {
+      toast.loading("Executing clear completed", { id: "clearCompleted" });
+
+      for (const { id, completed } of todos ?? []) {
+        if (completed) {
+          await deleteTodo(id).unwrap();
+        }
+      }
+
+      toast.success("Clear completed executed successfully.", {
+        id: "clearCompleted",
+      });
+    } catch (error) {
+      toast.error("Failed to execute clear completed.");
+    }
+
+    // todos?.forEach((todo) => {
+    //   const { id, completed } = todo;
+    //   if (completed) {
+    //     await deleteTodo(id).unwrap();
+    //   }
+    // });
+  };
+
+  const handleSearch = debounceFn<React.ChangeEventHandler<HTMLInputElement>>(
+    ({ target: { value } }) => {
+      dispatch(setSearchTodo(value));
+    },
+    800,
+  );
 
   return (
     <div>
       <form
         className="flex items-center rounded-md bg-gray-100 px-4 py-4"
-        onSubmit={()=>{}}
+        onSubmit={submitHandler}
       >
         <img
           src="/assets/images/notes.svg"
@@ -37,7 +136,7 @@ export default function Header() {
       </form>
 
       <ul className="my-4 flex justify-between text-xs text-gray-500">
-        <li className="flex cursor-pointer space-x-1" onClick={()=>{}}>
+        <li className="flex cursor-pointer space-x-1" onClick={completeHandler}>
           <img
             className="h-4 w-4"
             src="/assets/images/double-tick.svg"
@@ -56,7 +155,7 @@ export default function Header() {
           </div>
         </li>
 
-        <li className="cursor-pointer" onClick={()=>{}}>
+        <li className="cursor-pointer" onClick={handleClearCompleted}>
           <div className="relative">
             <span className="group">
               Clear completed
