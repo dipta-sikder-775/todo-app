@@ -6,6 +6,10 @@ const App = () => {
       className="min-h-screen"
     >
       <Navbar />
+
+      <Card>
+hello
+      </Card>
     </main>
   )
 }
