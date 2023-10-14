@@ -12,7 +12,7 @@ const App = () => {
       <hr className="mt-4" />
 
 <ListContainer>
-  hello
+  <Todo/>
 </ListContainer>
       </Card>
     </main>
