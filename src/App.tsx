@@ -1,3 +1,4 @@
+import Card from '@components/Card'
 import React from 'react'
 
 const App = () => {
@@ -8,6 +9,7 @@ const App = () => {
       <Navbar />
 
       <Card>
+      <Header />
 hello
       </Card>
     </main>
