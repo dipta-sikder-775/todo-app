@@ -1,13 +1,28 @@
+import { useEffect, useRef, useState } from "react";
 
-const EditForm = () => {
+interface IEditFormProps {
+  todoText: string;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>, text: string) => void;
+}
+
+const EditForm = ({ todoText, handleSubmit }: IEditFormProps) => {
+  const [text, setText] = useState(todoText || "");
+  const focusInput = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (focusInput.current) {
+      focusInput.current.focus();
+    }
+  }, [focusInput]);
 
   return (
-    <form onSubmit={(e) => {}}>
+    <form onSubmit={(e) => handleSubmit?.(e, text)}>
       <input
+        ref={focusInput}
         type="text"
         className="w-full focus:bg-transparent focus:outline-none"
         value={text}
-        onChange={(e) => {console.log("e: ", e)}}
+        onChange={(e) => setText(e.target.value)}
       />
     </form>
   );
