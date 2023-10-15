@@ -19,7 +19,7 @@ Welcome to the React TypeScript Todo App! This simple and elegant web applicatio
 
 - **Complete/Incomplete:** Mark tasks as complete or incomplete with a simple click.
 
-- **Search Todos:** Find specific tasks quickly by searching for their name.
+- **Search Todos:** Quickly find specific tasks by searching for their name. The search functionality is optimized with debouncing to reduce unnecessary requests to the server, resulting in improved performance.
 
 - **Edit & Update:** Modify and update your tasks as needed.
 
