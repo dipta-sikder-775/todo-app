@@ -25,7 +25,6 @@ export default function Footer() {
     useAppSelector(selectFilterReducer);
   const { data: todos, isSuccess } = useGetTodosQuery({
     completed,
-    color,
     _order,
     _sort,
   });
@@ -79,6 +78,7 @@ export default function Footer() {
             <li></li>
 
             <li
+              title="Filter by color group"
               className={`h-3 w-3 cursor-pointer rounded-full border-2 border-green-500 md:hover:bg-green-500 ${
                 color?.includes("green") && "bg-green-500"
               }`}
@@ -86,6 +86,7 @@ export default function Footer() {
             />
 
             <li
+              title="Filter by color group"
               className={`h-3 w-3 cursor-pointer rounded-full border-2 border-red-500 md:hover:bg-red-500 ${
                 color?.includes("red") && "bg-red-500"
               }`}
@@ -93,6 +94,7 @@ export default function Footer() {
             />
 
             <li
+              title="Filter by color group"
               className={`h-3 w-3 cursor-pointer rounded-full border-2 border-yellow-500 md:hover:bg-yellow-500 ${
                 color?.includes("yellow") && "bg-yellow-500"
               }`}

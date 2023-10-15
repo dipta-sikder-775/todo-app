@@ -56,10 +56,10 @@ Follow these steps to run the app locally:
 
 ## Live Site
 
-Access the live site here: [Your Live Site Link](https://www.example.com)
+Access the live site here: [https://custom-todo-app.vercel.app/](https://custom-todo-app.vercel.app/)
 
 ## Feedback
 
-We hope you find this app useful for managing your tasks. If you have any feedback or encounter issues, please don't hesitate to [create an issue](https://github.com/your/repo/issues). We appreciate your input!
+We hope you find this app useful for managing your tasks. If you have any feedback or encounter issues, please don't hesitate to [create an issue](https://github.com/dipta-sikder-775/todo-app/issues). We appreciate your input!
 
 Happy task management!

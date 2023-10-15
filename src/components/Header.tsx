@@ -26,9 +26,7 @@ export default function Header() {
   const { data: todos } = useGetTodosQuery({
     _order,
     _sort,
-    color,
     completed,
-    text_like,
   });
 
   const [addTodo] = useAddTodoMutation();
@@ -113,7 +111,7 @@ export default function Header() {
       >
         <img
           src="/assets/images/notes.svg"
-          className="h-6 w-6"
+          className="h-6 w-6 shrink-0"
           alt="Notes icon"
         />
 
@@ -128,7 +126,7 @@ export default function Header() {
 
         <button
           type="submit"
-          // className={`h-8 w-8 appearance-none bg-[url('/assets/images/plus.png')] bg-contain bg-no-repeat`}
+          className="shrink-0"
         >
           <CgAdd className="ml-1 h-8 w-8" />
           <span className="sr-only">submit</span>
