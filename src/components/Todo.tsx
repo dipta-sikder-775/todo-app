@@ -1,5 +1,15 @@
 // import cancelImage from "../assets/images/cancel.png";
 // import editIcon from "../assets/icons/edit.svg";
+
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import {
+  useDeleteTodoMutation,
+  useEditTodoMutation,
+} from "@redux/features/todo/todoApi";
+import { IGetTodosData } from "@ts/todo";
+import EditForm from "./EditForm";
+import CopyToClipBoard from "./CopyToClipBoard";
 import { TiPencil, TiDeleteOutline } from "react-icons/ti";
 
 type THandleSubmit = (
@@ -12,6 +22,71 @@ interface ITodoProps {
 }
 
 export default function Todo({ todo }: ITodoProps) {
+  const { text, id, completed = false, color } = todo || {};
+  const [isEditing, setIsEditing] = useState(false);
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [editTodo] = useEditTodoMutation();
+
+  const handleStatusChange = async () => {
+    if (!completed) {
+      try {
+        toast.loading("Executing todo complete action", { id: "editTodo" });
+        await editTodo({ id, data: { completed: true } }).unwrap();
+        toast.success("Todo completed", { id: "editTodo" });
+      } catch (error) {
+        toast.error("Failed to execute todo complete action", {
+          id: "editTodo",
+        });
+      }
+    } else {
+      try {
+        toast.loading("Executing todo incomplete action", { id: "editTodo" });
+        await editTodo({ id, data: { completed: false } }).unwrap();
+        toast.success("Todo incomplete", { id: "editTodo" });
+      } catch (error) {
+        toast.error("Failed to execute todo incomplete action", {
+          id: "editTodo",
+        });
+      }
+    }
+  };
+
+  const handleColorChange = async (color: string) => {
+    try {
+      toast.loading("Executing category edit", { id: "editTodo" });
+      await editTodo({ id, data: { color } }).unwrap();
+      toast.success("Category edit executed successfully", { id: "editTodo" });
+    } catch (error) {
+      toast.error("Failed to execute edit category", { id: "editTodo" });
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      toast.loading("Executing delete a todo", { id: "deleteTodo" });
+      await deleteTodo(id).unwrap();
+      toast.success("Todo deleted successfully", { id: "deleteTodo" });
+    } catch (error) {
+      toast.error("Failed to execute delete a todo", { id: "deleteTodo" });
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSubmit: THandleSubmit = async (e, newText) => {
+    e.preventDefault();
+
+    try {
+      toast.loading("Executing edit a todo", { id: "editTodo" });
+      await editTodo({ id, data: { text: newText } }).unwrap();
+      toast.success("Edit a todo executed successfully", { id: "editTodo" });
+      setIsEditing(false);
+    } catch (error) {
+      toast.error("Failed to execute edit a todo", { id: "editTodo" });
+    }
+  };
 
   const labelId = crypto?.randomUUID();
 
@@ -51,7 +126,7 @@ export default function Todo({ todo }: ITodoProps) {
         }`}
       >
         {isEditing ? (
-          <EditForm todoText={text} handleSubmit={()=>{}} />
+          <EditForm todoText={text} handleSubmit={handleSubmit} />
         ) : (
           text
         )}
@@ -62,7 +137,7 @@ export default function Todo({ todo }: ITodoProps) {
           color === "green" && "bg-green-500"
         }`}
         title="Group category"
-        onClick={() => {}}
+        onClick={() => handleColorChange("green")}
       />
 
       <div
@@ -70,7 +145,7 @@ export default function Todo({ todo }: ITodoProps) {
           color === "yellow" && "bg-yellow-500"
         }`}
         title="Group category"
-        onClick={() => {}}
+        onClick={() => handleColorChange("yellow")}
       />
 
       <div
@@ -78,7 +153,7 @@ export default function Todo({ todo }: ITodoProps) {
           color === "red" && "bg-red-500"
         }`}
         title="Group category"
-        onClick={() => {}}
+        onClick={() => handleColorChange("red")}
       />
 
       <CopyToClipBoard copyText={text} />
